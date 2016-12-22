@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+let kSavedItemsKey = "ISSPagerSavedReminders"
+
 extension String {
     var URLEscapedString: String {
         
@@ -17,5 +19,19 @@ extension String {
     }
     var UTF8EncodedData: Data {
         return self.data(using: String.Encoding.utf8)!
+    }
+}
+
+extension Date
+{
+    var humanReadableDate:String
+    {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .medium
+        dateFormatter.locale = Locale(identifier: "en_US") // for now. Useful for localization later 
+        
+        return dateFormatter.string(from: self)
+        
     }
 }

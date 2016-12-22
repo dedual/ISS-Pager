@@ -50,7 +50,7 @@ class ISSViewAReminderViewController: UITableViewController {
                 
                 // should we update the next arrival times here?
                 
-                self.tableView.reloadData()
+                self.tableView.reloadData() // we might need to force this call on the main thread. Must test. 
             }
         }
     }
@@ -87,6 +87,7 @@ class ISSViewAReminderViewController: UITableViewController {
 
         self.title = "Reminder"
         // Determine if view is added modally. If so, add close button
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -106,8 +107,39 @@ class ISSViewAReminderViewController: UITableViewController {
         // save changes made to form
         
         // load all saved reminders
+
+        var allReminders:[ISSReminder] = []
+        
+        if let savedItems = UserDefaults.standard.array(forKey: kSavedItemsKey)
+        {
+            for savedItem in savedItems
+            {
+                if let regionToMonitor = NSKeyedUnarchiver.unarchiveObject(with: savedItem as! Data) as? ISSReminder
+                {
+                    allReminders.append(regionToMonitor)
+                }
+            }
+        }
         
         // save the new one
+
+        if let reminder = self.newReminder
+        {
+            allReminders.append(reminder)
+            
+            let items = NSMutableArray()
+            for aReminder in allReminders {
+                let item = NSKeyedArchiver.archivedData(withRootObject: aReminder)
+                items.add(item)
+            }
+            
+            UserDefaults.standard.set(items, forKey: kSavedItemsKey)
+            UserDefaults.standard.synchronize()
+        }
+        else
+        {
+            // throw alert here. Something's wrong
+        }
         
     }
     
@@ -180,14 +212,163 @@ class ISSViewAReminderViewController: UITableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        <#code#>
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
+    {
+        switch(indexPath.section)
+        {
+        case 0: // Name
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "remaindersDetailMainCell", for: indexPath) as! RemindersDetailMainCell
+            
+            cell.label.text = "Name"
+            
+            if let name = self.newReminder?.name
+            {
+                cell.textfield.text = name
+            }
+            else
+            {
+                cell.textfield.placeholder = "Enter a name here"
+            }
+            
+            self.nameTextField = cell.textfield // for quick reference
+            
+            return cell
+            
+        case 1: // Address
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "remaindersDetailMainCell", for: indexPath) as! RemindersDetailMainCell
+            
+            cell.label.text = "Address"
+            
+            if let address = self.newReminder?.address
+            {
+                cell.textfield.text = address
+            }
+            else
+            {
+                cell.textfield.placeholder = "Enter an address here"
+            }
+            
+            self.addressTextField = cell.textfield // for quick reference
+            
+            return cell
+            
+        case 2: // Map
+            
+            if tempPlacemark != nil
+            {
+                // point the map to our placemark
+                let region = MKCoordinateRegionMakeWithDistance(self.tempPlacemark!.location!.coordinate, 200, 200); // not entirely safe, I know
+                self.mapCell.mapview.region = region;
+            
+                // add a pin using self as the object implementing the MKAnnotation protocol
+                self.mapCell.mapview.addAnnotation(self)
+                
+                return self.mapCell;
+            }
+            else
+            {
+                //save button goes here
+                
+                var cell = tableView.dequeueReusableCell(withIdentifier: "basicCellButton")
+                
+                if cell == nil
+                {
+                    cell = UITableViewCell(style: .default, reuseIdentifier: "basicCellButton")
+                    cell?.selectionStyle = .none
+                }
+                if let subviews = cell?.contentView.subviews // make sure that nothing funky's going on with how Apple preserves views
+                {
+                    for aSubview in subviews
+                    {
+                        aSubview.removeFromSuperview()
+                    }
+                }
+                
+                let button = UIButton(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: tableView.rowHeight))
+                
+                button.backgroundColor = UIColor.green
+                button.setTitleColor(UIColor.white, for: .normal)
+                button.setTitle("SAVE CHANGES", for: .normal)
+                button.titleLabel?.textAlignment = .center
+                button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17.0)
+                button.addTarget(self, action: #selector(ISSViewAReminderViewController.saveChanges(sender:)), for: .touchUpInside)
+                
+                cell?.contentView.addSubview(button)
+                
+                return cell!
+            }
+            
+        case 3: // Next ISS Viewing OR save button (if there's no placemark
+            
+            var cell = tableView.dequeueReusableCell(withIdentifier: "basicCell")
+            
+            if cell == nil
+            {
+                cell = UITableViewCell(style: .subtitle, reuseIdentifier: "basicCell")
+                cell?.selectionStyle = .none
+            }
+            
+            let arrivalTimeObject = (self.newReminder?.arrivalTimes[indexPath.item])!
+            cell?.textLabel?.text = arrivalTimeObject.riseTime.humanReadableDate
+            cell?.detailTextLabel?.text = "Duration: \(arrivalTimeObject.duration) seconds"
+            
+            return cell!
+
+        case 4: // Save changes
+        
+            var cell = tableView.dequeueReusableCell(withIdentifier: "basicCellButton")
+            
+            if cell == nil
+            {
+                cell = UITableViewCell(style: .default, reuseIdentifier: "basicCellButton")
+                cell?.selectionStyle = .none
+            }
+            if let subviews = cell?.contentView.subviews // make sure that nothing funky's going on with how Apple preserves views
+            {
+                for aSubview in subviews
+                {
+                    aSubview.removeFromSuperview()
+                }
+            }
+
+            let button = UIButton(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: tableView.rowHeight))
+            
+            button.backgroundColor = UIColor.green
+            button.setTitleColor(UIColor.white, for: .normal)
+            button.setTitle("SAVE CHANGES", for: .normal)
+            button.titleLabel?.textAlignment = .center
+            button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 17.0)
+            button.addTarget(self, action: #selector(ISSViewAReminderViewController.saveChanges(sender:)), for: .touchUpInside)
+            
+            cell?.contentView.addSubview(button)
+            
+            return cell!
+            
+            break
+            
+        default:
+            
+            let cell = tableView.dequeueReusableCell(withIdentifier: "basicCell")
+            return cell!
+            
+        }
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let titles = ["Name", "Address", "Map", "Next ISS viewing", ""]
         
         return titles[section]
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if(indexPath.section == 2)
+        {
+            return 240.0
+        }
+        
+        return self.tableView.rowHeight
     }
 
     /*
@@ -208,7 +389,24 @@ extension ISSViewAReminderViewController:UITextFieldDelegate
     
     func textFieldDidEndEditing(_ textField: UITextField)
     {
-        
+        if textField == addressTextField, textField.text!.characters.count > 0
+        {
+            // query for a location here
+            
+            let address = textField.text!
+            
+            self.forwardGeocode(inputAddress: address, completed: { (success, error, aPlacemark) in
+                
+                if(success)
+                {
+                    self.tempPlacemark = aPlacemark
+                }
+                else
+                {
+                    // handle error here
+                }
+            })
+        }
     }
 }
 
