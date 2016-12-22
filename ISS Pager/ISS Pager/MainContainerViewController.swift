@@ -8,7 +8,10 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class MainContainerViewController: UIViewController {
+    
+    @IBOutlet var segmentedControl: UISegmentedControl!
+    @IBOutlet var addNewReminderBarButton: UIBarButtonItem!
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -52,9 +52,9 @@ extension NSPersistentStoreCoordinator {
 }
 
 
-class CrewCoreDataManger
+class ISSPagerCoreDataManager
 {
-    open static let SharedInstance = CrewCoreDataManger()
+    open static let SharedInstance = ISSPagerCoreDataManager()
     
     /*
      The persistent container for the application. This implementation
@@ -100,10 +100,10 @@ class CrewCoreDataManger
         get
         {
             if #available(iOS 10, *) {
-                return CrewCoreDataManger.SharedInstance.persistentContainer.viewContext
+                return ISSPagerCoreDataManager.SharedInstance.persistentContainer.viewContext
             } else
             {
-                let coordinator = CrewCoreDataManger.SharedInstance.persistentStoreCoordinator
+                let coordinator = ISSPagerCoreDataManager.SharedInstance.persistentStoreCoordinator
                 let managedObjectContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
                 managedObjectContext.persistentStoreCoordinator = coordinator
                 return managedObjectContext
@@ -113,7 +113,7 @@ class CrewCoreDataManger
     
     static func saveContext()
     {
-        let context = CrewCoreDataManger.SharedInstance.viewContext
+        let context = ISSPagerCoreDataManager.SharedInstance.viewContext
         if context.hasChanges {
             do {
                 try context.save()
