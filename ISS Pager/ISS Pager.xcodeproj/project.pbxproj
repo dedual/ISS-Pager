@@ -10,12 +10,10 @@
 		373FA3FE1E0B790900A20A9A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373FA3FD1E0B790900A20A9A /* AppDelegate.swift */; };
 		373FA4001E0B790900A20A9A /* MainContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373FA3FF1E0B790900A20A9A /* MainContainerViewController.swift */; };
 		373FA4031E0B790900A20A9A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 373FA4011E0B790900A20A9A /* Main.storyboard */; };
-		373FA4061E0B790900A20A9A /* ISS_Pager.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 373FA4041E0B790900A20A9A /* ISS_Pager.xcdatamodeld */; };
 		373FA4081E0B790900A20A9A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 373FA4071E0B790900A20A9A /* Assets.xcassets */; };
 		373FA40B1E0B790900A20A9A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 373FA4091E0B790900A20A9A /* LaunchScreen.storyboard */; };
 		373FA41A1E0B8AA100A20A9A /* ISSAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373FA4191E0B8AA100A20A9A /* ISSAPI.swift */; };
 		373FA41C1E0B8FCE00A20A9A /* ISSExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373FA41B1E0B8FCE00A20A9A /* ISSExtensions.swift */; };
-		373FA41E1E0B965E00A20A9A /* ISSPagerCoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373FA41D1E0B965E00A20A9A /* ISSPagerCoreDataManager.swift */; };
 		373FA4201E0B976600A20A9A /* AnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373FA41F1E0B976600A20A9A /* AnnotationView.swift */; };
 		373FA4221E0B999800A20A9A /* ISSMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373FA4211E0B999800A20A9A /* ISSMapViewController.swift */; };
 		373FA4241E0B99ED00A20A9A /* ISSRemindersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373FA4231E0B99ED00A20A9A /* ISSRemindersViewController.swift */; };
@@ -23,6 +21,10 @@
 		373FA4281E0BAA5700A20A9A /* ISSViewAReminderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373FA4271E0BAA5700A20A9A /* ISSViewAReminderViewController.swift */; };
 		373FA42A1E0BAA9400A20A9A /* BaseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373FA4291E0BAA9400A20A9A /* BaseTableViewController.swift */; };
 		373FA42C1E0BADEF00A20A9A /* MapCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 373FA42B1E0BADEF00A20A9A /* MapCell.xib */; };
+		373FA42F1E0BF8F600A20A9A /* RemindersDetailMainCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 373FA42E1E0BF8F600A20A9A /* RemindersDetailMainCell.xib */; };
+		373FA4321E0BF9A400A20A9A /* Cells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373FA4311E0BF9A400A20A9A /* Cells.swift */; };
+		373FA4361E0C058900A20A9A /* ISSLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373FA4351E0C058900A20A9A /* ISSLocation.swift */; };
+		373FA4381E0C0A9C00A20A9A /* ISSReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373FA4371E0C0A9C00A20A9A /* ISSReminder.swift */; };
 		8AFFB5CC24F2E838CD99D8E5 /* Pods_ISS_Pager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDB730B131254ED78A858713 /* Pods_ISS_Pager.framework */; };
 /* End PBXBuildFile section */
 
@@ -31,13 +33,11 @@
 		373FA3FD1E0B790900A20A9A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		373FA3FF1E0B790900A20A9A /* MainContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContainerViewController.swift; sourceTree = "<group>"; };
 		373FA4021E0B790900A20A9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		373FA4051E0B790900A20A9A /* ISS_Pager.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ISS_Pager.xcdatamodel; sourceTree = "<group>"; };
 		373FA4071E0B790900A20A9A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		373FA40A1E0B790900A20A9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		373FA40C1E0B790900A20A9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		373FA4191E0B8AA100A20A9A /* ISSAPI.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISSAPI.swift; sourceTree = "<group>"; };
 		373FA41B1E0B8FCE00A20A9A /* ISSExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISSExtensions.swift; sourceTree = "<group>"; };
-		373FA41D1E0B965E00A20A9A /* ISSPagerCoreDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISSPagerCoreDataManager.swift; sourceTree = "<group>"; };
 		373FA41F1E0B976600A20A9A /* AnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnnotationView.swift; sourceTree = "<group>"; };
 		373FA4211E0B999800A20A9A /* ISSMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISSMapViewController.swift; sourceTree = "<group>"; };
 		373FA4231E0B99ED00A20A9A /* ISSRemindersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISSRemindersViewController.swift; sourceTree = "<group>"; };
@@ -45,6 +45,10 @@
 		373FA4271E0BAA5700A20A9A /* ISSViewAReminderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISSViewAReminderViewController.swift; sourceTree = "<group>"; };
 		373FA4291E0BAA9400A20A9A /* BaseTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseTableViewController.swift; sourceTree = "<group>"; };
 		373FA42B1E0BADEF00A20A9A /* MapCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapCell.xib; sourceTree = "<group>"; };
+		373FA42E1E0BF8F600A20A9A /* RemindersDetailMainCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RemindersDetailMainCell.xib; sourceTree = "<group>"; };
+		373FA4311E0BF9A400A20A9A /* Cells.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cells.swift; sourceTree = "<group>"; };
+		373FA4351E0C058900A20A9A /* ISSLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISSLocation.swift; sourceTree = "<group>"; };
+		373FA4371E0C0A9C00A20A9A /* ISSReminder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISSReminder.swift; sourceTree = "<group>"; };
 		E88A4BBB66C44903DA2B324E /* Pods-ISS Pager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ISS Pager.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ISS Pager/Pods-ISS Pager.debug.xcconfig"; sourceTree = "<group>"; };
 		F9C6B267FD4AA95EC7DC21C7 /* Pods-ISS Pager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ISS Pager.release.xcconfig"; path = "Pods/Target Support Files/Pods-ISS Pager/Pods-ISS Pager.release.xcconfig"; sourceTree = "<group>"; };
 		FDB730B131254ED78A858713 /* Pods_ISS_Pager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ISS_Pager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,7 +92,7 @@
 				373FA4151E0B7C1100A20A9A /* Views */,
 				373FA4141E0B7C0900A20A9A /* View Controllers */,
 				373FA4121E0B7BF800A20A9A /* Network */,
-				373FA4131E0B7C0300A20A9A /* Core Data */,
+				373FA4131E0B7C0300A20A9A /* Core Data + Models */,
 				373FA4011E0B790900A20A9A /* Main.storyboard */,
 				373FA4071E0B790900A20A9A /* Assets.xcassets */,
 				373FA4091E0B790900A20A9A /* LaunchScreen.storyboard */,
@@ -105,13 +109,13 @@
 			name = Network;
 			sourceTree = "<group>";
 		};
-		373FA4131E0B7C0300A20A9A /* Core Data */ = {
+		373FA4131E0B7C0300A20A9A /* Core Data + Models */ = {
 			isa = PBXGroup;
 			children = (
-				373FA4041E0B790900A20A9A /* ISS_Pager.xcdatamodeld */,
-				373FA41D1E0B965E00A20A9A /* ISSPagerCoreDataManager.swift */,
+				373FA4351E0C058900A20A9A /* ISSLocation.swift */,
+				373FA4371E0C0A9C00A20A9A /* ISSReminder.swift */,
 			);
-			name = "Core Data";
+			name = "Core Data + Models";
 			sourceTree = "<group>";
 		};
 		373FA4141E0B7C0900A20A9A /* View Controllers */ = {
@@ -156,6 +160,8 @@
 			isa = PBXGroup;
 			children = (
 				373FA42B1E0BADEF00A20A9A /* MapCell.xib */,
+				373FA42E1E0BF8F600A20A9A /* RemindersDetailMainCell.xib */,
+				373FA4311E0BF9A400A20A9A /* Cells.swift */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -242,6 +248,7 @@
 				373FA40B1E0B790900A20A9A /* LaunchScreen.storyboard in Resources */,
 				373FA4081E0B790900A20A9A /* Assets.xcassets in Resources */,
 				373FA42C1E0BADEF00A20A9A /* MapCell.xib in Resources */,
+				373FA42F1E0BF8F600A20A9A /* RemindersDetailMainCell.xib in Resources */,
 				373FA4031E0B790900A20A9A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -301,16 +308,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				373FA4361E0C058900A20A9A /* ISSLocation.swift in Sources */,
+				373FA4381E0C0A9C00A20A9A /* ISSReminder.swift in Sources */,
 				373FA41A1E0B8AA100A20A9A /* ISSAPI.swift in Sources */,
 				373FA4221E0B999800A20A9A /* ISSMapViewController.swift in Sources */,
+				373FA4321E0BF9A400A20A9A /* Cells.swift in Sources */,
 				373FA4261E0B9AC400A20A9A /* ISSReminderAnnotation.swift in Sources */,
 				373FA4001E0B790900A20A9A /* MainContainerViewController.swift in Sources */,
 				373FA3FE1E0B790900A20A9A /* AppDelegate.swift in Sources */,
 				373FA4281E0BAA5700A20A9A /* ISSViewAReminderViewController.swift in Sources */,
 				373FA42A1E0BAA9400A20A9A /* BaseTableViewController.swift in Sources */,
 				373FA4201E0B976600A20A9A /* AnnotationView.swift in Sources */,
-				373FA4061E0B790900A20A9A /* ISS_Pager.xcdatamodeld in Sources */,
-				373FA41E1E0B965E00A20A9A /* ISSPagerCoreDataManager.swift in Sources */,
 				373FA4241E0B99ED00A20A9A /* ISSRemindersViewController.swift in Sources */,
 				373FA41C1E0B8FCE00A20A9A /* ISSExtensions.swift in Sources */,
 			);
@@ -481,19 +489,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		373FA4041E0B790900A20A9A /* ISS_Pager.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				373FA4051E0B790900A20A9A /* ISS_Pager.xcdatamodel */,
-			);
-			currentVersion = 373FA4051E0B790900A20A9A /* ISS_Pager.xcdatamodel */;
-			path = ISS_Pager.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 373FA3F21E0B790900A20A9A /* Project object */;
 }

@@ -4,6 +4,7 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -35,7 +36,7 @@
             </tableViewCellContentView>
             <color key="backgroundColor" red="0.96055269241333008" green="0.96052396297454834" blue="0.9605402946472168" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <connections>
-                <outlet property="mapView" destination="dLt-Eh-197" id="KxC-Jw-Uw9"/>
+                <outlet property="mapview" destination="dLt-Eh-197" id="JJc-iM-d5H"/>
             </connections>
             <point key="canvasLocation" x="704.5" y="455"/>
         </tableViewCell>
