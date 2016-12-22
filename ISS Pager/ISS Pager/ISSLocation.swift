@@ -30,9 +30,9 @@ class ISSLocation: NSObject
         self.lastUpdated = Date.init(timeIntervalSince1970: (json["timestamp"] as! NSNumber).doubleValue)
         let coordinatesData = json["iss_position"] as! [String:AnyObject]
         
-        let lat = (coordinatesData["latitude"] as! NSNumber).doubleValue
-        let lng = (coordinatesData["longitude"] as! NSNumber).doubleValue
-        
-        self.currLocation = CLLocation(latitude: lat, longitude: lng)
+        if let lat = coordinatesData["latitude"]?.doubleValue, let lng = coordinatesData["longitude"]?.doubleValue
+        {
+            self.currLocation = CLLocation(latitude: lat, longitude: lng)
+        }
     }
 }

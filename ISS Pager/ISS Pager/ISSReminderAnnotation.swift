@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 import MapKit
 import CoreLocation
-import CoreData
 
 
 class ISSReminderAnnotation: NSObject, MKAnnotation

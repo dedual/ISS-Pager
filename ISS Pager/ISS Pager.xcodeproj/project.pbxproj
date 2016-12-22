@@ -26,6 +26,7 @@
 		373FA4361E0C058900A20A9A /* ISSLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373FA4351E0C058900A20A9A /* ISSLocation.swift */; };
 		373FA4381E0C0A9C00A20A9A /* ISSReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 373FA4371E0C0A9C00A20A9A /* ISSReminder.swift */; };
 		37B7246F1E0C4DC400583558 /* ResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B7246E1E0C4DC400583558 /* ResultsTableViewController.swift */; };
+		37B724711E0C94E100583558 /* ISSLocationAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B724701E0C94E100583558 /* ISSLocationAnnotation.swift */; };
 		8AFFB5CC24F2E838CD99D8E5 /* Pods_ISS_Pager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDB730B131254ED78A858713 /* Pods_ISS_Pager.framework */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +52,7 @@
 		373FA4351E0C058900A20A9A /* ISSLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISSLocation.swift; sourceTree = "<group>"; };
 		373FA4371E0C0A9C00A20A9A /* ISSReminder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISSReminder.swift; sourceTree = "<group>"; };
 		37B7246E1E0C4DC400583558 /* ResultsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsTableViewController.swift; sourceTree = "<group>"; };
+		37B724701E0C94E100583558 /* ISSLocationAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISSLocationAnnotation.swift; sourceTree = "<group>"; };
 		E88A4BBB66C44903DA2B324E /* Pods-ISS Pager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ISS Pager.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ISS Pager/Pods-ISS Pager.debug.xcconfig"; sourceTree = "<group>"; };
 		F9C6B267FD4AA95EC7DC21C7 /* Pods-ISS Pager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ISS Pager.release.xcconfig"; path = "Pods/Target Support Files/Pods-ISS Pager/Pods-ISS Pager.release.xcconfig"; sourceTree = "<group>"; };
 		FDB730B131254ED78A858713 /* Pods_ISS_Pager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ISS_Pager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -155,6 +157,7 @@
 			children = (
 				373FA41F1E0B976600A20A9A /* AnnotationView.swift */,
 				373FA4251E0B9AC400A20A9A /* ISSReminderAnnotation.swift */,
+				37B724701E0C94E100583558 /* ISSLocationAnnotation.swift */,
 			);
 			name = Map;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 			files = (
 				373FA4361E0C058900A20A9A /* ISSLocation.swift in Sources */,
 				373FA4381E0C0A9C00A20A9A /* ISSReminder.swift in Sources */,
+				37B724711E0C94E100583558 /* ISSLocationAnnotation.swift in Sources */,
 				373FA41A1E0B8AA100A20A9A /* ISSAPI.swift in Sources */,
 				373FA4221E0B999800A20A9A /* ISSMapViewController.swift in Sources */,
 				373FA4321E0BF9A400A20A9A /* Cells.swift in Sources */,

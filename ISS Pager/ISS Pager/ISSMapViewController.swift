@@ -12,19 +12,9 @@ import CoreLocation
 
 class ISSMapViewController: UIViewController, MKMapViewDelegate
 {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     @IBOutlet var mapView:MKMapView!
+    
+    var currISSLocation:ISSLocation!
     
     var referenceContainerViewController:MainContainerViewController!
     
@@ -33,14 +23,62 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate
         return referenceContainerViewController.reminders
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Do any additional setup after loading the view.
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    func refreshISSLocation()
+    {
+        ISSNetwork.request(target: .CurrentLocation(), success: { json in
+            if let jsonObject = json as? [String:AnyObject]
+            {
+                self.currISSLocation = ISSLocation(json: jsonObject)
+                
+                for anAnnotation in self.mapView.annotations
+                {
+                    if anAnnotation is ISSLocationAnnotation
+                    {
+                        self.mapView.removeAnnotation(anAnnotation)
+                    }
+                }
+                self.mapView.removeOverlays(self.mapView.overlays)
+
+                let identifier = "ISSLocation"
+                let annotation = ISSLocationAnnotation(coordinate: self.currISSLocation.currLocation.coordinate, identifier: identifier, location: self.currISSLocation)
+                
+                self.mapView.addAnnotation(annotation)
+                
+                let circle = MKCircle(center: annotation.coordinate, radius: 80000.0)
+                
+                self.mapView.add(circle)
+                
+                
+            }
+        }, error: { response in
+            
+        }) { error in
+            
+        }
+    }
+    
     func refreshMapAnnotations() // we always worry about our local data
     {
         for anAnnotation in self.mapView.annotations
         {
             self.mapView.removeAnnotation(anAnnotation)
         }
-        
-        self.mapView.removeOverlays(self.mapView.overlays)
         
         // add placepoints here
         
@@ -67,6 +105,7 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate
         {
             return nil
         }
+        
         if annotation is ISSReminderAnnotation
         {
             var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "Pin")
@@ -81,10 +120,27 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate
             {
                 annotationView?.annotation = annotation
             }
+            
             annotationView?.image = UIImage(named: "RemindersIcon")
             
             return annotationView
             
+        }
+        else if annotation is ISSLocationAnnotation
+        {
+            var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "ISS")
+            
+            if annotationView == nil
+            {
+                annotationView = AnnotationView(annotation: annotation, reuseIdentifier: "ISS")
+                annotationView?.canShowCallout = true
+            }else
+            {
+                annotationView?.annotation = annotation
+            }
+            annotationView?.image = UIImage(named: "ISSIcon")
+            
+            return annotationView
         }
         else
         {
@@ -129,6 +185,7 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate
     func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool)
     {
         self.refreshMapAnnotations()
+        self.refreshISSLocation()
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
