@@ -10,6 +10,8 @@ import UIKit
 import MapKit
 import CoreLocation
 
+// note: we need to confirm that whenever we update a reminder we're updating, not instantiating a new one. -Nick D.
+
 class ISSViewAReminderViewController: UITableViewController {
     
     // MARK: - Variables
@@ -50,7 +52,7 @@ class ISSViewAReminderViewController: UITableViewController {
                 
                 // should we update the next arrival times here?
                 
-                self.tableView.reloadData() // we might need to force this call on the main thread. Must test. 
+                self.tableView.reloadData() // we might need to force this call on the main thread. Must test.
             }
         }
     }
@@ -59,10 +61,11 @@ class ISSViewAReminderViewController: UITableViewController {
     
     //MARK: - Initializers
     
-    init(placemark:CLPlacemark?)
+    init(placemark:CLPlacemark?, reminder:ISSReminder? = nil)
     {
         super.init(style: .grouped)
         
+        self.newReminder = reminder ?? ISSReminder()
         self.tempPlacemark = placemark
     }
     
@@ -389,6 +392,11 @@ extension ISSViewAReminderViewController:UITextFieldDelegate
     
     func textFieldDidEndEditing(_ textField: UITextField)
     {
+        if textField == nameTextField
+        {
+            self.newReminder?.name = textField.text
+        }
+        
         if textField == addressTextField, textField.text!.characters.count > 0
         {
             // query for a location here
@@ -400,6 +408,50 @@ extension ISSViewAReminderViewController:UITextFieldDelegate
                 if(success)
                 {
                     self.tempPlacemark = aPlacemark
+                    
+                    // Is our data fresh? 
+                    
+                    if let arrivalTimes = self.newReminder?.arrivalTimes
+                    {
+                        if(arrivalTimes[0].riseTime.minutes(from: Date()) > 1)// if our data's older than a minute, it most likely won't be accurate
+                        {
+                            ISSNetwork.request(target: .PassTimes(lat: aPlacemark!.location!.coordinate.latitude, lng: aPlacemark!.location!.coordinate.longitude), success: { json in
+                                
+                                if let jsonObject = json as? [String:AnyObject]
+                                {
+                                    self.newReminder!.clearArrivalTimes()
+                                    self.newReminder!.prepareWithJSON(json: jsonObject)
+                                }
+                                
+                                self.tableView.reloadData()
+                                
+                            }, error: { response in
+                                do{
+                                var errorMessage = "Network error in how we recover a pass time"
+                                    
+                                if let json = try response.mapJSON() as? [String:AnyObject]
+                                {
+                                    errorMessage = json["errors"] as! String
+                                }
+                                
+                                // handle it further here
+                                }
+                                catch
+                                {
+                                    // failed to even parse the response. Handle appropriately
+                                }
+                                
+                            }, failure: { error in
+                                let errorDescription = error.localizedDescription
+                                
+                                // handle error here
+                            })
+                        }
+                    }
+                    else
+                    {
+                        // we need to fetch the data regardless
+                    }
                 }
                 else
                 {

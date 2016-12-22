@@ -13,11 +13,20 @@ class ISSLocation: NSObject
 {
     var currLocation:CLLocation!
     var lastUpdated:Date!
+    
+    override init()
+    {
+        super.init()
+    }
 
     init(json:[String:AnyObject])
     {
         super.init()
-        
+        self.prepareWithJSON(json: json)
+    }
+    
+    func prepareWithJSON(json:[String:AnyObject])
+    {
         self.lastUpdated = Date.init(timeIntervalSince1970: (json["timestamp"] as! NSNumber).doubleValue)
         let coordinatesData = json["iss_position"] as! [String:AnyObject]
         
@@ -25,6 +34,5 @@ class ISSLocation: NSObject
         let lng = (coordinatesData["longitude"] as! NSNumber).doubleValue
         
         self.currLocation = CLLocation(latitude: lat, longitude: lng)
-        
     }
 }

@@ -56,10 +56,47 @@ class ISSReminder: NSObject, NSCoding
     var lastUpdated:Date!
     var arrivalTimes:[ISSReminderRiseAndDuration]!
     
+    override init()
+    {
+        super.init()
+    }
+    
     init(json:[String:AnyObject])
     {
         super.init()
         
+        self.prepareWithJSON(json: json)
+    }
+    
+    required init?(coder decoder:NSCoder)
+    {
+        self.latitude = decoder.decodeDouble(forKey: kISSReminderLatitudeKey)
+        self.longitude = decoder.decodeDouble(forKey: kISSReminderLongitudeKey)
+        self.name = decoder.decodeObject(forKey: kISSRemindersNameKey) as! String
+        self.lastUpdated = decoder.decodeObject(forKey: kISSReminderLastUpdatedKey) as! Date
+        self.address = decoder.decodeObject(forKey: kISSRemindersAddressKey) as! String
+        self.arrivalTimes = decoder.decodeObject(forKey: kISSReminderRiseTimeArrayKey) as! [ISSReminderRiseAndDuration]
+        
+    }
+    
+    func encode(with coder:NSCoder)
+    {
+        coder.encode(self.latitude, forKey: kISSReminderLatitudeKey)
+        coder.encode(self.longitude, forKey: kISSReminderLongitudeKey)
+        coder.encode(self.name, forKey: kISSRemindersNameKey)
+        coder.encode(self.address, forKey: kISSRemindersAddressKey)
+        coder.encode(self.lastUpdated, forKey: kISSReminderLastUpdatedKey)
+        coder.encode(self.arrivalTimes, forKey: kISSReminderRiseTimeArrayKey)
+    }
+    
+    func clearArrivalTimes()
+    {
+        self.arrivalTimes.removeAll()
+        self.arrivalTimes = nil
+    }
+    
+    func prepareWithJSON(json:[String:AnyObject])
+    {
         let requestObject = json["request"] as! [String:AnyObject]
         
         self.lastUpdated = Date.init(timeIntervalSince1970: (requestObject["datetime"] as! NSNumber).doubleValue)
@@ -83,26 +120,5 @@ class ISSReminder: NSObject, NSCoding
                 arrivalTimes.append(arrivalTime)
             }
         }
-    }
-    
-    required init?(coder decoder:NSCoder)
-    {
-        self.latitude = decoder.decodeDouble(forKey: kISSReminderLatitudeKey)
-        self.longitude = decoder.decodeDouble(forKey: kISSReminderLongitudeKey)
-        self.name = decoder.decodeObject(forKey: kISSRemindersNameKey) as! String
-        self.lastUpdated = decoder.decodeObject(forKey: kISSReminderLastUpdatedKey) as! Date
-        self.address = decoder.decodeObject(forKey: kISSRemindersAddressKey) as! String
-        self.arrivalTimes = decoder.decodeObject(forKey: kISSReminderRiseTimeArrayKey) as! [ISSReminderRiseAndDuration]
-        
-    }
-    
-    func encode(with coder:NSCoder)
-    {
-        coder.encode(self.latitude, forKey: kISSReminderLatitudeKey)
-        coder.encode(self.longitude, forKey: kISSReminderLongitudeKey)
-        coder.encode(self.name, forKey: kISSRemindersNameKey)
-        coder.encode(self.address, forKey: kISSRemindersAddressKey)
-        coder.encode(self.lastUpdated, forKey: kISSReminderLastUpdatedKey)
-        coder.encode(self.arrivalTimes, forKey: kISSReminderRiseTimeArrayKey)
     }
 }
