@@ -37,14 +37,19 @@ class MainContainerViewController: UIViewController {
         
         return viewController
     }()
+    
+    // MARK: - View Methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupView()
+        
+        let addRemindersButton:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(MainContainerViewController.addReminder(_:)))
+        
+        self.navigationItem.rightBarButtonItem = addRemindersButton
     }
     
-    // MARK: - View Methods
     private func setupView() {
         setupSegmentedControl()
         
@@ -53,11 +58,11 @@ class MainContainerViewController: UIViewController {
     
     private func updateView() {
         if segmentedControl.selectedSegmentIndex == 0 {
-            remove(asChildViewController: mapViewController)
-            add(asChildViewController: remindersViewController)
-        } else {
             remove(asChildViewController: remindersViewController)
             add(asChildViewController: mapViewController)
+        } else {
+            remove(asChildViewController: mapViewController)
+            add(asChildViewController: remindersViewController)
         }
         
     }
@@ -109,6 +114,18 @@ class MainContainerViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func addReminder(_ sender:UIButton)
+    {
+        //
+        
+        let popViewController = ISSViewAReminderViewController()
+        let navigationController = UINavigationController(rootViewController: popViewController)
+        
+        self.present(navigationController, animated: true) { 
+            
+        }
+        
+    }
 
 }
 

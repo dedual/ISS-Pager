@@ -9,27 +9,21 @@
 import UIKit
 
 class BaseTableViewController: UITableViewController {
-
-    // MARK: - Types
-    
-    static let nibName = "TableCell"
-    static let tableViewCellIdentifier = "cellID"
     
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let nib = UINib(nibName: BaseTableViewController.nibName, bundle: nil)
-        
-        // Required if our subclasses are to use `dequeueReusableCellWithIdentifier(_:forIndexPath:)`.
-        tableView.register(nib, forCellReuseIdentifier: BaseTableViewController.tableViewCellIdentifier)
     }
     
     // MARK: - Configuration
     
     func configureCell(_ cell: UITableViewCell, forReminder reminder: ISSReminder) {
        // configure cell here, Nick
+        
+        cell.textLabel?.text = reminder.name
+        cell.detailTextLabel?.text = "Earliest arrival: \(reminder.arrivalTimes[0].riseTime.humanReadableDate)"
         
     }
 

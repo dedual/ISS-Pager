@@ -61,7 +61,14 @@ class ISSViewAReminderViewController: UITableViewController {
     
     //MARK: - Initializers
     
-    init(placemark:CLPlacemark?, reminder:ISSReminder? = nil)
+    class func detailViewControllerForReminder(_ reminder: ISSReminder) -> ISSViewAReminderViewController {
+        
+        let viewController = ISSViewAReminderViewController(reminder: reminder)
+                
+        return viewController
+    }
+    
+    init(placemark:CLPlacemark? = nil, reminder:ISSReminder? = nil)
     {
         super.init(style: .grouped)
         
@@ -91,6 +98,10 @@ class ISSViewAReminderViewController: UITableViewController {
         self.title = "Reminder"
         // Determine if view is added modally. If so, add close button
         
+        let dismissButton:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(ISSViewAReminderViewController.close(_:)))
+        
+        self.navigationItem.leftBarButtonItem = dismissButton
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -98,7 +109,7 @@ class ISSViewAReminderViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func close(sender:UIButton?)
+    @IBAction func close(_ sender:UIButton?)
     {
         self.dismiss(animated: true) { 
             
@@ -170,6 +181,7 @@ class ISSViewAReminderViewController: UITableViewController {
     }
     
     //MARK: - Reverse Geocoding methods
+    // we might need to move this one away from here, it's not being used right now and proably will be later on. 
     
     func reverseGeocode(inputCoordinate:CLLocation, completed: @escaping (_ finished:Bool, _ error:Error?, _ placemark:CLPlacemark?) -> ())
     {
@@ -221,41 +233,53 @@ class ISSViewAReminderViewController: UITableViewController {
         {
         case 0: // Name
             
-            let cell = tableView.dequeueReusableCell(withIdentifier: "remaindersDetailMainCell", for: indexPath) as! RemindersDetailMainCell
+            var cell = tableView.dequeueReusableCell(withIdentifier: "RemindersDetailMainCell") as? RemindersDetailMainCell
             
-            cell.label.text = "Name"
+            if cell == nil
+            {
+                tableView.register(UINib(nibName: "RemindersDetailMainCell", bundle: nil), forCellReuseIdentifier: "RemindersDetailMainCell")
+                cell = tableView.dequeueReusableCell(withIdentifier: "RemindersDetailMainCell") as? RemindersDetailMainCell
+            }
+            
+            cell!.label.text = "Name"
             
             if let name = self.newReminder?.name
             {
-                cell.textfield.text = name
+                cell!.textfield.text = name
             }
             else
             {
-                cell.textfield.placeholder = "Enter a name here"
+                cell!.textfield.placeholder = "Enter a name here"
             }
             
-            self.nameTextField = cell.textfield // for quick reference
+            self.nameTextField = cell!.textfield // for quick reference
             
-            return cell
+            return cell!
             
         case 1: // Address
             
-            let cell = tableView.dequeueReusableCell(withIdentifier: "remaindersDetailMainCell", for: indexPath) as! RemindersDetailMainCell
+            var cell = tableView.dequeueReusableCell(withIdentifier: "RemindersDetailMainCell") as? RemindersDetailMainCell
             
-            cell.label.text = "Address"
+            if cell == nil
+            {
+                tableView.register(UINib(nibName: "RemindersDetailMainCell", bundle: nil), forCellReuseIdentifier: "RemindersDetailMainCell")
+                cell = tableView.dequeueReusableCell(withIdentifier: "RemindersDetailMainCell") as? RemindersDetailMainCell
+            }
+            
+            cell!.label.text = "Address"
             
             if let address = self.newReminder?.address
             {
-                cell.textfield.text = address
+                cell!.textfield.text = address
             }
             else
             {
-                cell.textfield.placeholder = "Enter an address here"
+                cell!.textfield.placeholder = "Enter an address here"
             }
             
-            self.addressTextField = cell.textfield // for quick reference
+            self.addressTextField = cell!.textfield // for quick reference
             
-            return cell
+            return cell!
             
         case 2: // Map
             
@@ -289,7 +313,7 @@ class ISSViewAReminderViewController: UITableViewController {
                     }
                 }
                 
-                let button = UIButton(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: tableView.rowHeight))
+                let button = UIButton(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height:44))
                 
                 button.backgroundColor = UIColor.green
                 button.setTitleColor(UIColor.white, for: .normal)
@@ -335,8 +359,8 @@ class ISSViewAReminderViewController: UITableViewController {
                     aSubview.removeFromSuperview()
                 }
             }
-
-            let button = UIButton(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: tableView.rowHeight))
+            
+            let button = UIButton(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height:44))
             
             button.backgroundColor = UIColor.green
             button.setTitleColor(UIColor.white, for: .normal)
@@ -349,8 +373,6 @@ class ISSViewAReminderViewController: UITableViewController {
             
             return cell!
             
-            break
-            
         default:
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "basicCell")
@@ -362,11 +384,16 @@ class ISSViewAReminderViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let titles = ["Name", "Address", "Map", "Next ISS viewing", ""]
         
+        if(section == 2 && self.tempPlacemark == nil)
+        {
+            return ""
+        }
+        
         return titles[section]
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if(indexPath.section == 2)
+        if(indexPath.section == 2 && self.tempPlacemark != nil)
         {
             return 240.0
         }
