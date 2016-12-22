@@ -28,7 +28,7 @@ class BaseTableViewController: UITableViewController {
     
     // MARK: - Configuration
     
-    func configureCell(_ cell: UITableViewCell, forReminder reminder: Reminders) {
+    func configureCell(_ cell: UITableViewCell, forReminder reminder: ISSReminder) {
        // configure cell here, Nick
         
     }

@@ -10,24 +10,83 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class ISSViewAReminderViewController: UIViewController {
+class ISSViewAReminderViewController: UITableViewController {
     
     // MARK: - Variables
-    
-    @IBOutlet var tableView:UITableView!
     
     // shortcuts to text fields
     
     var nameTextField:UITextField!
     var addressTextField:UITextField!
     
+    @IBOutlet var mapCell:MapTableViewCell!
+    
+    weak var tempPlacemark:CLPlacemark?
+    {
+        didSet
+        {
+            // create a suitable ISSReminder and update the tableview 
+            
+            if newReminder != nil, self.tempPlacemark != nil
+            {
+                if let nameText = nameTextField.text
+                {
+                    newReminder!.name = nameText
+                }
+                
+                let streetComponent = (tempPlacemark?.subThoroughfare ?? "") + " " + (tempPlacemark?.thoroughfare ?? "")
+                let cityComponent = tempPlacemark?.locality ?? ""
+                let stateComponent = tempPlacemark?.administrativeArea ?? ""
+                let postalCodeComponent = tempPlacemark?.postalCode ?? ""
+                let countryCode = tempPlacemark?.country ?? ""
+                
+                newReminder!.address = streetComponent + " " +
+                    cityComponent + ", " +
+                    stateComponent + ", " +
+                    countryCode + ", " +
+                    postalCodeComponent
+                
+                // do we want to change the user-entered address? To be decided later, Nick.
+                
+                // should we update the next arrival times here?
+                
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
     var newReminder:ISSReminder?
     
+    //MARK: - Initializers
+    
+    init(placemark:CLPlacemark?)
+    {
+        super.init(style: .grouped)
+        
+        self.tempPlacemark = placemark
+    }
+    
+     required convenience init?(coder aDecoder: NSCoder)
+    {
+        self.init(placemark: nil)
+    }
+    
+    convenience override init(style:UITableViewStyle)
+    {
+        self.init(placemark: nil)
+    }
 
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        Bundle.main.loadNibNamed("RemindersDetailMainCell", owner: self, options: nil)
+        Bundle.main.loadNibNamed("MapCell", owner: self, options: nil)
+
+        self.title = "Reminder"
+        // Determine if view is added modally. If so, add close button
     }
 
     override func didReceiveMemoryWarning() {
@@ -96,6 +155,40 @@ class ISSViewAReminderViewController: UIViewController {
             }
         }
     }
+    
+    // MARK: - TableView Delegates and Data Sources
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        if (self.tempPlacemark != nil)
+        {
+            return 5
+        }
+        else
+        {
+            return 3
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
+        switch section
+        {
+        case 3:
+            return self.newReminder?.arrivalTimes.count ?? 0
+        default:
+            return 1
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        <#code#>
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let titles = ["Name", "Address", "Map", "Next ISS viewing", ""]
+        
+        return titles[section]
+    }
 
     /*
     // MARK: - Navigation
@@ -109,24 +202,6 @@ class ISSViewAReminderViewController: UIViewController {
 
 }
 
-//MARK: UITableView Delegate and Data Source
-
-extension ISSViewAReminderViewController:UITableViewDelegate, UITableViewDataSource
-{
-    func numberOfSections(in tableView: UITableView) -> Int {
-        <#code#>
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        <#code#>
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        <#code#>
-    }
-    
-}
-
 extension ISSViewAReminderViewController:UITextFieldDelegate
 {
     // remember, we want to update the map and entry every time there's a change
@@ -134,5 +209,13 @@ extension ISSViewAReminderViewController:UITextFieldDelegate
     func textFieldDidEndEditing(_ textField: UITextField)
     {
         
+    }
+}
+
+extension ISSViewAReminderViewController:MKAnnotation
+{
+    var coordinate: CLLocationCoordinate2D
+    {
+            return (self.tempPlacemark?.location?.coordinate)!
     }
 }

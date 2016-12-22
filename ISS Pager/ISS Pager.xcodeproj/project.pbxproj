@@ -92,7 +92,7 @@
 				373FA4151E0B7C1100A20A9A /* Views */,
 				373FA4141E0B7C0900A20A9A /* View Controllers */,
 				373FA4121E0B7BF800A20A9A /* Network */,
-				373FA4131E0B7C0300A20A9A /* Core Data + Models */,
+				373FA4131E0B7C0300A20A9A /* Models */,
 				373FA4011E0B790900A20A9A /* Main.storyboard */,
 				373FA4071E0B790900A20A9A /* Assets.xcassets */,
 				373FA4091E0B790900A20A9A /* LaunchScreen.storyboard */,
@@ -109,13 +109,13 @@
 			name = Network;
 			sourceTree = "<group>";
 		};
-		373FA4131E0B7C0300A20A9A /* Core Data + Models */ = {
+		373FA4131E0B7C0300A20A9A /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				373FA4351E0C058900A20A9A /* ISSLocation.swift */,
 				373FA4371E0C0A9C00A20A9A /* ISSReminder.swift */,
 			);
-			name = "Core Data + Models";
+			name = Models;
 			sourceTree = "<group>";
 		};
 		373FA4141E0B7C0900A20A9A /* View Controllers */ = {
