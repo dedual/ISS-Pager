@@ -13,6 +13,7 @@
 		373FA4061E0B790900A20A9A /* ISS_Pager.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 373FA4041E0B790900A20A9A /* ISS_Pager.xcdatamodeld */; };
 		373FA4081E0B790900A20A9A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 373FA4071E0B790900A20A9A /* Assets.xcassets */; };
 		373FA40B1E0B790900A20A9A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 373FA4091E0B790900A20A9A /* LaunchScreen.storyboard */; };
+		8AFFB5CC24F2E838CD99D8E5 /* Pods_ISS_Pager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FDB730B131254ED78A858713 /* Pods_ISS_Pager.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,9 @@
 		373FA4071E0B790900A20A9A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		373FA40A1E0B790900A20A9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		373FA40C1E0B790900A20A9A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E88A4BBB66C44903DA2B324E /* Pods-ISS Pager.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ISS Pager.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ISS Pager/Pods-ISS Pager.debug.xcconfig"; sourceTree = "<group>"; };
+		F9C6B267FD4AA95EC7DC21C7 /* Pods-ISS Pager.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ISS Pager.release.xcconfig"; path = "Pods/Target Support Files/Pods-ISS Pager/Pods-ISS Pager.release.xcconfig"; sourceTree = "<group>"; };
+		FDB730B131254ED78A858713 /* Pods_ISS_Pager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ISS_Pager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,6 +35,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8AFFB5CC24F2E838CD99D8E5 /* Pods_ISS_Pager.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -42,6 +47,8 @@
 			children = (
 				373FA3FC1E0B790900A20A9A /* ISS Pager */,
 				373FA3FB1E0B790900A20A9A /* Products */,
+				E64DAA01E180A6BC06F49A5C /* Pods */,
+				A3DF5EC7933250A83DE1E047 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -56,12 +63,12 @@
 		373FA3FC1E0B790900A20A9A /* ISS Pager */ = {
 			isa = PBXGroup;
 			children = (
+				373FA3FD1E0B790900A20A9A /* AppDelegate.swift */,
 				373FA4171E0B7C3F00A20A9A /* Helpers */,
 				373FA4151E0B7C1100A20A9A /* Views */,
 				373FA4141E0B7C0900A20A9A /* View Controllers */,
 				373FA4131E0B7C0300A20A9A /* Core Data */,
 				373FA4121E0B7BF800A20A9A /* Network */,
-				373FA3FD1E0B790900A20A9A /* AppDelegate.swift */,
 				373FA3FF1E0B790900A20A9A /* ViewController.swift */,
 				373FA4011E0B790900A20A9A /* Main.storyboard */,
 				373FA4071E0B790900A20A9A /* Assets.xcassets */,
@@ -97,6 +104,7 @@
 		373FA4151E0B7C1100A20A9A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				373FA4181E0B7CD800A20A9A /* Map */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -115,6 +123,30 @@
 			name = Helpers;
 			sourceTree = "<group>";
 		};
+		373FA4181E0B7CD800A20A9A /* Map */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Map;
+			sourceTree = "<group>";
+		};
+		A3DF5EC7933250A83DE1E047 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FDB730B131254ED78A858713 /* Pods_ISS_Pager.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E64DAA01E180A6BC06F49A5C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E88A4BBB66C44903DA2B324E /* Pods-ISS Pager.debug.xcconfig */,
+				F9C6B267FD4AA95EC7DC21C7 /* Pods-ISS Pager.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -122,9 +154,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 373FA40F1E0B790900A20A9A /* Build configuration list for PBXNativeTarget "ISS Pager" */;
 			buildPhases = (
+				38FD310351C50E02E57A5F70 /* [CP] Check Pods Manifest.lock */,
 				373FA3F61E0B790900A20A9A /* Sources */,
 				373FA3F71E0B790900A20A9A /* Frameworks */,
 				373FA3F81E0B790900A20A9A /* Resources */,
+				063E6FE090DE786FB09279CF /* [CP] Embed Pods Frameworks */,
+				AC340CCFB8EE0D7710BE6292 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -181,6 +216,54 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		063E6FE090DE786FB09279CF /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ISS Pager/Pods-ISS Pager-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		38FD310351C50E02E57A5F70 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		AC340CCFB8EE0D7710BE6292 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ISS Pager/Pods-ISS Pager-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		373FA3F61E0B790900A20A9A /* Sources */ = {
@@ -308,6 +391,7 @@
 		};
 		373FA4101E0B790900A20A9A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E88A4BBB66C44903DA2B324E /* Pods-ISS Pager.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "ISS Pager/Info.plist";
@@ -320,6 +404,7 @@
 		};
 		373FA4111E0B790900A20A9A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F9C6B267FD4AA95EC7DC21C7 /* Pods-ISS Pager.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "ISS Pager/Info.plist";
