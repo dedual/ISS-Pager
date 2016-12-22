@@ -24,17 +24,49 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate
         // Dispose of any resources that can be recreated.
     }
     
+    @IBOutlet var mapView:MKMapView!
+    
     var referenceContainerViewController:MainContainerViewController!
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    var reminders:[ISSReminder]
+    {
+        var allReminders:[ISSReminder] = []
+        
+        if let savedItems = UserDefaults.standard.array(forKey: kSavedItemsKey)
+        {
+            for savedItem in savedItems
+            {
+                if let regionToMonitor = NSKeyedUnarchiver.unarchiveObject(with: savedItem as! Data) as? ISSReminder
+                {
+                    allReminders.append(regionToMonitor)
+                }
+            }
+        }
+        
+        return allReminders
     }
-    */
+    
+    func refreshMapAnnotations() // we always worry about our local data
+    {
+        for anAnnotation in self.mapView.annotations
+        {
+            self.mapView.removeAnnotation(anAnnotation)
+        }
+        
+        self.mapView.removeOverlays(self.mapView.overlays)
+        
+        // add placepoints here
+        
+        for aReminder in reminders
+        {
+            let identifier = "reminder_\(aReminder.location.coordinate.latitude)\(aReminder.location.coordinate.longitude)\(aReminder.lastUpdated.humanReadableDate)"
+            
+            let annotation = ISSReminderAnnotation(coordinate: aReminder.location.coordinate, identifier: identifier, reminder: aReminder)
+            self.mapView.addAnnotation(annotation)
+            
+        }
+        
+    }
     
     //MARK: - MKMapViewDelegate function
     
@@ -91,6 +123,11 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate
                 subview.removeFromSuperview()
             }
         }
+    }
+    
+    func mapViewDidFinishRenderingMap(_ mapView: MKMapView, fullyRendered: Bool)
+    {
+        self.refreshMapAnnotations()
     }
     
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
