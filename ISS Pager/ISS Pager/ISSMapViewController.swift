@@ -107,7 +107,12 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl)
     {
+        let selectedReminder = (view.annotation as! ISSReminderAnnotation).reminder!
         
+        // Set up the detail view controller to show.
+        let detailViewController = ISSViewAReminderViewController.detailViewControllerForReminder(selectedReminder)
+        
+        referenceContainerViewController.navigationController?.pushViewController(detailViewController, animated: true)
     }
     
     func mapView(_ mapView: MKMapView,

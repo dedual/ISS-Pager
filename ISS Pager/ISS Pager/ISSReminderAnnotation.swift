@@ -34,7 +34,7 @@ class ISSReminderAnnotation: NSObject, MKAnnotation
     
     var subtitle: String?
     {
-        return "Calculate rise time here"
+        return "Earliest arrival: \(reminder.arrivalTimes![0].riseTime.humanReadableDate)"
     }
 
     init(coordinate:CLLocationCoordinate2D, identifier:String, reminder:ISSReminder)
