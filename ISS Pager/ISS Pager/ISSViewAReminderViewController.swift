@@ -1,5 +1,5 @@
 //
-//  ISSRemindersViewController.swift
+//  ISSViewAReminderViewController.swift
 //  ISS Pager
 //
 //  Created by Nicolas Dedual on 12/22/16.
@@ -7,21 +7,14 @@
 //
 
 import UIKit
+import MapKit
 
-class ISSRemindersViewController: BaseTableViewController, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating
+class MapTableViewCell:UITableViewCell
 {
-    /// State restoration values.
-    enum RestorationKeys : String {
-        case viewControllerTitle
-        case searchControllerIsActive
-        case searchBarText
-        case searchBarIsFirstResponder
-    }
-    
-    struct SearchControllerRestorableState {
-        var wasActive = false
-        var wasFirstResponder = false
-    }
+    @IBOutlet var mapview:MKMapView!
+}
+
+class ISSViewAReminderViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

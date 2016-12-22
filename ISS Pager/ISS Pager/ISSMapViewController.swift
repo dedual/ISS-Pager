@@ -7,8 +7,11 @@
 //
 
 import UIKit
+import MapKit
+import CoreLocation
 
-class ISSMapViewController: UIViewController {
+class ISSMapViewController: UIViewController, MKMapViewDelegate
+{
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,5 +34,71 @@ class ISSMapViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    //MARK: - MKMapViewDelegate function
+    
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView?
+    {
+        if annotation is MKUserLocation
+        {
+            return nil
+        }
+        if annotation is ISSReminderAnnotation
+        {
+            var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "Pin")
+            
+            if annotationView == nil
+            {
+                annotationView = AnnotationView(annotation: annotation, reuseIdentifier: "Pin")
+                annotationView?.canShowCallout = true
+                annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+                
+            }else
+            {
+                annotationView?.annotation = annotation
+            }
+            annotationView?.image = UIImage(named: "RemindersIcon")
+            
+            return annotationView
+            
+        }
+        else
+        {
+            return nil
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl)
+    {
+        
+    }
+    
+    func mapView(_ mapView: MKMapView,
+                 didSelect view: MKAnnotationView)
+    {
+        
+    }
+    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+        if view.isKind(of: AnnotationView.self)
+        {
+            for subview in view.subviews
+            {
+                subview.removeFromSuperview()
+            }
+        }
+    }
+    
+    func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        
+        let circleRenderer = MKCircleRenderer(overlay: overlay)
+        circleRenderer.fillColor = UIColor.blue.withAlphaComponent(0.1)
+        circleRenderer.strokeColor = UIColor.blue
+        circleRenderer.lineWidth = 1
+        return circleRenderer
+    }
 
 }
