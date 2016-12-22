@@ -133,4 +133,43 @@ class ISSReminder: NSObject, NSCoding
             }
         }
     }
+    
+    func refreshArrivalTimes(completed: @escaping (_ finished:Bool, _ error:Error?) -> ())
+    {
+        
+        ISSNetwork.request(target: .PassTimes(lat: self.location.coordinate.latitude, lng: self.location.coordinate.longitude), success: { json in
+            
+            if let jsonObject = json as? [String:AnyObject]
+            {
+                self.clearArrivalTimes()
+                self.prepareWithJSON(json: jsonObject)
+            }
+            
+            completed(true, nil)
+            
+            
+        }, error: { response in
+            do{
+                var errorMessage = "Network error in how we recover a pass time"
+                
+                if let json = try response.mapJSON() as? [String:AnyObject]
+                {
+                    errorMessage = json["errors"] as! String
+                }
+                
+                // handle it further here
+                completed(false, nil)
+            }
+            catch
+            {
+                // failed to even parse the response. Handle appropriately
+            }
+            
+        }, failure: { error in
+            
+            // handle error here
+            completed(false, error)
+
+        })
+    }
 }

@@ -28,20 +28,7 @@ class ISSRemindersViewController: BaseTableViewController, UISearchBarDelegate, 
     
     var reminders:[ISSReminder]
     {
-        var allReminders:[ISSReminder] = []
-        
-        if let savedItems = UserDefaults.standard.array(forKey: kSavedItemsKey)
-        {
-            for savedItem in savedItems
-            {
-                if let regionToMonitor = NSKeyedUnarchiver.unarchiveObject(with: savedItem as! Data) as? ISSReminder
-                {
-                    allReminders.append(regionToMonitor)
-                }
-            }
-        }
-        
-        return allReminders
+        return referenceContainerViewController.reminders
     }
     
     /// Search controller to help us with filtering.
@@ -206,6 +193,16 @@ class ISSRemindersViewController: BaseTableViewController, UISearchBarDelegate, 
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let items = NSMutableArray()
+        for aReminder in reminders {
+            let item = NSKeyedArchiver.archivedData(withRootObject: aReminder)
+            items.add(item)
+        }
+        
+        UserDefaults.standard.set(items, forKey: kSavedItemsKey)
+        UserDefaults.standard.synchronize()
+        
         let selectedReminder: ISSReminder
         
         // Check to see which table view cell was selected.

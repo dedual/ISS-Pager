@@ -41,6 +41,28 @@ class MainContainerViewController: UIViewController {
         return viewController
     }()
     
+    lazy var reminders:[ISSReminder] =
+    {
+        var allReminders:[ISSReminder] = []
+        
+        if let savedItems = UserDefaults.standard.array(forKey: kSavedItemsKey)
+        {
+            for savedItem in savedItems
+            {
+                if let reminder = NSKeyedUnarchiver.unarchiveObject(with: savedItem as! Data) as? ISSReminder
+                {
+                    allReminders.append(reminder)
+                    
+                    reminder.refreshArrivalTimes(completed: { (success, error) in
+                        
+                    })
+                }
+            }
+        }
+        
+        return allReminders
+    }()
+    
     // MARK: - View Methods
 
     override func viewDidLoad() {
@@ -51,6 +73,39 @@ class MainContainerViewController: UIViewController {
         let addRemindersButton:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(MainContainerViewController.addReminder(_:)))
         
         self.navigationItem.rightBarButtonItem = addRemindersButton
+        
+        // update reminders here
+        
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool)
+    {
+        super.viewWillAppear(animated)
+        
+        refreshAllReminders()
+    }
+    
+    func refreshAllReminders()
+    {
+        var allReminders:[ISSReminder] = []
+        
+        if let savedItems = UserDefaults.standard.array(forKey: kSavedItemsKey)
+        {
+            for savedItem in savedItems
+            {
+                if let reminder = NSKeyedUnarchiver.unarchiveObject(with: savedItem as! Data) as? ISSReminder
+                {
+                    allReminders.append(reminder)
+                    
+                    reminder.refreshArrivalTimes(completed: { (success, error) in
+                        
+                    })
+                }
+            }
+        }
+        
+        self.reminders = allReminders
     }
     
     private func setupView() {
@@ -119,7 +174,16 @@ class MainContainerViewController: UIViewController {
 
     @IBAction func addReminder(_ sender:UIButton)
     {
-        //
+        // save current reminders state
+        
+        let items = NSMutableArray()
+        for aReminder in reminders {
+            let item = NSKeyedArchiver.archivedData(withRootObject: aReminder)
+            items.add(item)
+        }
+        
+        UserDefaults.standard.set(items, forKey: kSavedItemsKey)
+        UserDefaults.standard.synchronize()
         
         let popViewController = ISSViewAReminderViewController()
         let navigationController = UINavigationController(rootViewController: popViewController)

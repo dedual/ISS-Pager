@@ -30,20 +30,7 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate
     
     var reminders:[ISSReminder]
     {
-        var allReminders:[ISSReminder] = []
-        
-        if let savedItems = UserDefaults.standard.array(forKey: kSavedItemsKey)
-        {
-            for savedItem in savedItems
-            {
-                if let regionToMonitor = NSKeyedUnarchiver.unarchiveObject(with: savedItem as! Data) as? ISSReminder
-                {
-                    allReminders.append(regionToMonitor)
-                }
-            }
-        }
-        
-        return allReminders
+        return referenceContainerViewController.reminders
     }
     
     func refreshMapAnnotations() // we always worry about our local data
@@ -107,6 +94,15 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl)
     {
+        let items = NSMutableArray()
+        for aReminder in reminders {
+            let item = NSKeyedArchiver.archivedData(withRootObject: aReminder)
+            items.add(item)
+        }
+        
+        UserDefaults.standard.set(items, forKey: kSavedItemsKey)
+        UserDefaults.standard.synchronize()
+        
         let selectedReminder = (view.annotation as! ISSReminderAnnotation).reminder!
         
         // Set up the detail view controller to show.

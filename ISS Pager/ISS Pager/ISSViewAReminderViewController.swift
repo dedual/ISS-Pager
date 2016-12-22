@@ -462,83 +462,35 @@ extension ISSViewAReminderViewController:UITextFieldDelegate
                         {
                             self.tempPlacemark = aPlacemark
                     }
-                    // Is our data fresh? 
+                    // Is our data fresh?
                     
                     if let arrivalTimes = self.newReminder?.arrivalTimes
                     {
-                        if(arrivalTimes[0].riseTime.minutes(from: Date()) > 1)// if our data's older than a minute, it most likely won't be accurate
+                        if(Date().minutes(from: arrivalTimes[0].riseTime) > 1)// if our data's older than a minute, it most likely won't be accurate
                         {
-                            ISSNetwork.request(target: .PassTimes(lat: aPlacemark!.location!.coordinate.latitude, lng: aPlacemark!.location!.coordinate.longitude), success: { json in
+                            self.newReminder?.refreshArrivalTimes(completed: { (success, error) in
                                 
-                                if let jsonObject = json as? [String:AnyObject]
+                                if(success)
                                 {
-                                    self.newReminder!.clearArrivalTimes()
-                                    self.newReminder!.prepareWithJSON(json: jsonObject)
+                                    DispatchQueue.main.async
+                                        {
+                                            self.tableView.reloadData()
+                                    }
                                 }
-                                DispatchQueue.main.async
-                                {
-                                        self.tableView.reloadData()
-                                }
-                                
-                            }, error: { response in
-                                do{
-                                var errorMessage = "Network error in how we recover a pass time"
-                                    
-                                if let json = try response.mapJSON() as? [String:AnyObject]
-                                {
-                                    errorMessage = json["errors"] as! String
-                                }
-                                
-                                // handle it further here
-                                }
-                                catch
-                                {
-                                    // failed to even parse the response. Handle appropriately
-                                }
-                                
-                            }, failure: { error in
-                                let errorDescription = error.localizedDescription
-                                
-                                // handle error here
                             })
                         }
                     }
                     else
                     {
-                        // we need to fetch the data regardless
-                        ISSNetwork.request(target: .PassTimes(lat: aPlacemark!.location!.coordinate.latitude, lng: aPlacemark!.location!.coordinate.longitude), success: { json in
+                        self.newReminder?.refreshArrivalTimes(completed: { (success, error) in
                             
-                            if let jsonObject = json as? [String:AnyObject]
+                            if(success)
                             {
-                                self.newReminder!.clearArrivalTimes()
-                                self.newReminder!.prepareWithJSON(json: jsonObject)
-                            }
-                            
-                            DispatchQueue.main.async
-                                {
-                                    self.tableView.reloadData()
-                            }
-                            
-                        }, error: { response in
-                            do{
-                                var errorMessage = "Network error in how we recover a pass time"
-                                
-                                if let json = try response.mapJSON() as? [String:AnyObject]
-                                {
-                                    errorMessage = json["errors"] as! String
+                                DispatchQueue.main.async
+                                    {
+                                        self.tableView.reloadData()
                                 }
-                                
-                                // handle it further here
                             }
-                            catch
-                            {
-                                // failed to even parse the response. Handle appropriately
-                            }
-                            
-                        }, failure: { error in
-                            let errorDescription = error.localizedDescription
-                            
-                            // handle error here
                         })
                     }
                 }
