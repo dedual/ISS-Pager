@@ -79,8 +79,8 @@ extension ISSAPI:TargetType
         case.CurrentLocation():
             return "/iss-now.json"
             
-        case .PassTimes(let lat, let lng):
-            return "/iss-pass.json?lat=\(lat)&lon=\(lng)"
+        case .PassTimes(_,_):
+            return "/iss-pass.json"
             
         }
     }
@@ -103,8 +103,8 @@ extension ISSAPI:TargetType
          case.CurrentLocation():
             return nil
             
-         case .PassTimes(_, _):
-            return nil
+         case .PassTimes(let lat, let lng):
+            return ["lat":lat, "lon":lng]
         }
     }
     

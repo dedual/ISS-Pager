@@ -91,8 +91,11 @@ class ISSReminder: NSObject, NSCoding
     
     func clearArrivalTimes()
     {
-        self.arrivalTimes.removeAll()
-        self.arrivalTimes = nil
+        if self.arrivalTimes != nil
+        {
+            self.arrivalTimes.removeAll()
+            self.arrivalTimes = nil
+        }
     }
     
     func prepareWithJSON(json:[String:AnyObject])
@@ -100,8 +103,17 @@ class ISSReminder: NSObject, NSCoding
         let requestObject = json["request"] as! [String:AnyObject]
         
         self.lastUpdated = Date.init(timeIntervalSince1970: (requestObject["datetime"] as! NSNumber).doubleValue)
-        self.latitude = (requestObject["latitude"] as! NSNumber).doubleValue
-        self.longitude = (requestObject["latitude"] as! NSNumber).doubleValue
+        
+        if let lat = requestObject["latitude"]?.doubleValue
+        {
+            self.latitude = lat
+        }
+        
+        if let lng = requestObject["longitude"]?.doubleValue
+        {
+            self.longitude = lng
+        }
+
         
         // address should be entered after forward geocoding. Let's not do that here
         // same with name

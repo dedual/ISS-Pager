@@ -50,9 +50,6 @@ class ISSViewAReminderViewController: UITableViewController {
                 
                 // do we want to change the user-entered address? To be decided later, Nick.
                 
-                // should we update the next arrival times here?
-                
-                self.tableView.reloadData() // we might need to force this call on the main thread. Must test.
             }
         }
     }
@@ -253,6 +250,7 @@ class ISSViewAReminderViewController: UITableViewController {
             }
             
             self.nameTextField = cell!.textfield // for quick reference
+            self.nameTextField.delegate = self
             
             return cell!
             
@@ -278,6 +276,7 @@ class ISSViewAReminderViewController: UITableViewController {
             }
             
             self.addressTextField = cell!.textfield // for quick reference
+            self.addressTextField.delegate = self
             
             return cell!
             
@@ -449,8 +448,10 @@ extension ISSViewAReminderViewController:UITextFieldDelegate
                                     self.newReminder!.clearArrivalTimes()
                                     self.newReminder!.prepareWithJSON(json: jsonObject)
                                 }
-                                
-                                self.tableView.reloadData()
+                                DispatchQueue.main.async
+                                {
+                                        self.tableView.reloadData()
+                                }
                                 
                             }, error: { response in
                                 do{
@@ -478,6 +479,40 @@ extension ISSViewAReminderViewController:UITextFieldDelegate
                     else
                     {
                         // we need to fetch the data regardless
+                        ISSNetwork.request(target: .PassTimes(lat: aPlacemark!.location!.coordinate.latitude, lng: aPlacemark!.location!.coordinate.longitude), success: { json in
+                            
+                            if let jsonObject = json as? [String:AnyObject]
+                            {
+                                self.newReminder!.clearArrivalTimes()
+                                self.newReminder!.prepareWithJSON(json: jsonObject)
+                            }
+                            
+                            DispatchQueue.main.async
+                                {
+                                    self.tableView.reloadData()
+                            }
+                            
+                        }, error: { response in
+                            do{
+                                var errorMessage = "Network error in how we recover a pass time"
+                                
+                                if let json = try response.mapJSON() as? [String:AnyObject]
+                                {
+                                    errorMessage = json["errors"] as! String
+                                }
+                                
+                                // handle it further here
+                            }
+                            catch
+                            {
+                                // failed to even parse the response. Handle appropriately
+                            }
+                            
+                        }, failure: { error in
+                            let errorDescription = error.localizedDescription
+                            
+                            // handle error here
+                        })
                     }
                 }
                 else
