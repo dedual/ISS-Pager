@@ -56,6 +56,11 @@
 		373FA3FC1E0B790900A20A9A /* ISS Pager */ = {
 			isa = PBXGroup;
 			children = (
+				373FA4171E0B7C3F00A20A9A /* Helpers */,
+				373FA4151E0B7C1100A20A9A /* Views */,
+				373FA4141E0B7C0900A20A9A /* View Controllers */,
+				373FA4131E0B7C0300A20A9A /* Core Data */,
+				373FA4121E0B7BF800A20A9A /* Network */,
 				373FA3FD1E0B790900A20A9A /* AppDelegate.swift */,
 				373FA3FF1E0B790900A20A9A /* ViewController.swift */,
 				373FA4011E0B790900A20A9A /* Main.storyboard */,
@@ -65,6 +70,49 @@
 				373FA4041E0B790900A20A9A /* ISS_Pager.xcdatamodeld */,
 			);
 			path = "ISS Pager";
+			sourceTree = "<group>";
+		};
+		373FA4121E0B7BF800A20A9A /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Network;
+			sourceTree = "<group>";
+		};
+		373FA4131E0B7C0300A20A9A /* Core Data */ = {
+			isa = PBXGroup;
+			children = (
+				373FA4161E0B7C1E00A20A9A /* Models */,
+			);
+			name = "Core Data";
+			sourceTree = "<group>";
+		};
+		373FA4141E0B7C0900A20A9A /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		373FA4151E0B7C1100A20A9A /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		373FA4161E0B7C1E00A20A9A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		373FA4171E0B7C3F00A20A9A /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
