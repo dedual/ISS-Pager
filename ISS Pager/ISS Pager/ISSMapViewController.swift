@@ -24,6 +24,7 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate
         // Dispose of any resources that can be recreated.
     }
     
+    var referenceContainerViewController:MainContainerViewController!
 
     /*
     // MARK: - Navigation

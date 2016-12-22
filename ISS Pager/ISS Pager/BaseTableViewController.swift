@@ -23,7 +23,7 @@ class BaseTableViewController: UITableViewController {
        // configure cell here, Nick
         
         cell.textLabel?.text = reminder.name
-        cell.detailTextLabel?.text = "Earliest arrival: \(reminder.arrivalTimes[0].riseTime.humanReadableDate)"
+        cell.detailTextLabel?.text = "Earliest arrival: \(reminder.arrivalTimes![0].riseTime.humanReadableDate)"
         
     }
 

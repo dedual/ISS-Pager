@@ -29,7 +29,7 @@ class ISSReminderRiseAndDuration:NSObject, NSCoding
     }
     func encode(with coder:NSCoder)
     {
-        coder.encode(self.duration, forKey: kISSRemindeDurationKey)
+        coder.encode((self.duration as Double), forKey: kISSRemindeDurationKey) // Oh, the joys of typecasting in Swift
         coder.encode(self.riseTime, forKey: kISSReminderRiseTimeKey)
     }
 }
@@ -54,7 +54,7 @@ class ISSReminder: NSObject, NSCoding
     }
     
     var lastUpdated:Date!
-    var arrivalTimes:[ISSReminderRiseAndDuration]!
+    var arrivalTimes:[ISSReminderRiseAndDuration]?
     
     override init()
     {
@@ -80,9 +80,9 @@ class ISSReminder: NSObject, NSCoding
     }
     
     func encode(with coder:NSCoder)
-    {
-        coder.encode(self.latitude, forKey: kISSReminderLatitudeKey)
-        coder.encode(self.longitude, forKey: kISSReminderLongitudeKey)
+    {        
+        coder.encode((self.latitude as Double), forKey:kISSReminderLatitudeKey)
+        coder.encode((self.longitude as Double), forKey: kISSReminderLongitudeKey) // swift being ridiculous
         coder.encode(self.name, forKey: kISSRemindersNameKey)
         coder.encode(self.address, forKey: kISSRemindersAddressKey)
         coder.encode(self.lastUpdated, forKey: kISSReminderLastUpdatedKey)
@@ -93,7 +93,7 @@ class ISSReminder: NSObject, NSCoding
     {
         if self.arrivalTimes != nil
         {
-            self.arrivalTimes.removeAll()
+            self.arrivalTimes!.removeAll()
             self.arrivalTimes = nil
         }
     }
@@ -129,7 +129,7 @@ class ISSReminder: NSObject, NSCoding
                 
                 let arrivalTime = ISSReminderRiseAndDuration(rise: riseTime, duration: duration)
                 
-                arrivalTimes.append(arrivalTime)
+                arrivalTimes!.append(arrivalTime)
             }
         }
     }

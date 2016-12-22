@@ -23,7 +23,7 @@ class ISSViewAReminderViewController: UITableViewController {
     
     @IBOutlet var mapCell:MapTableViewCell!
     
-    weak var tempPlacemark:CLPlacemark?
+    var tempPlacemark:CLPlacemark?
     {
         didSet
         {
@@ -97,8 +97,10 @@ class ISSViewAReminderViewController: UITableViewController {
         
         let dismissButton:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(ISSViewAReminderViewController.close(_:)))
         
-        self.navigationItem.leftBarButtonItem = dismissButton
-        
+        if(self.isModal())
+        {
+            self.navigationItem.leftBarButtonItem = dismissButton
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -108,7 +110,8 @@ class ISSViewAReminderViewController: UITableViewController {
     
     @IBAction func close(_ sender:UIButton?)
     {
-        self.dismiss(animated: true) { 
+        self.dismiss(animated: true)
+        {
             
         }
     }
@@ -154,7 +157,17 @@ class ISSViewAReminderViewController: UITableViewController {
         
     }
     
-    
+    func isModal() -> Bool {
+        if self.presentingViewController != nil {
+            return true
+        } else if self.navigationController?.presentingViewController?.presentedViewController == self.navigationController  {
+            return true
+        } else if self.tabBarController?.presentingViewController is UITabBarController {
+            return true
+        }
+        
+        return false
+    }
     
     
     //MARK: - Forward Geocoding methods
@@ -202,10 +215,11 @@ class ISSViewAReminderViewController: UITableViewController {
     
     // MARK: - TableView Delegates and Data Sources
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        if (self.tempPlacemark != nil)
+    override func numberOfSections(in tableView: UITableView) -> Int
+    {
+        if self.tempPlacemark != nil || self.newReminder?.arrivalTimes != nil
         {
-            return 5
+            return (self.newReminder?.arrivalTimes!.count)! > 0 ? 5 : 3
         }
         else
         {
@@ -218,7 +232,7 @@ class ISSViewAReminderViewController: UITableViewController {
         switch section
         {
         case 3:
-            return self.newReminder?.arrivalTimes.count ?? 0
+            return (self.newReminder?.arrivalTimes!.count)!
         default:
             return 1
         }
@@ -285,9 +299,20 @@ class ISSViewAReminderViewController: UITableViewController {
             if tempPlacemark != nil
             {
                 // point the map to our placemark
+                
                 let region = MKCoordinateRegionMakeWithDistance(self.tempPlacemark!.location!.coordinate, 200, 200); // not entirely safe, I know
                 self.mapCell.mapview.region = region;
             
+                // add a pin using self as the object implementing the MKAnnotation protocol
+                self.mapCell.mapview.addAnnotation(self)
+                
+                return self.mapCell;
+            }
+            else if let count = self.newReminder?.arrivalTimes?.count, count > 0
+            {
+                let region = MKCoordinateRegionMakeWithDistance(self.newReminder!.location.coordinate, 200, 200); // not entirely safe, I know
+                self.mapCell.mapview.region = region;
+                
                 // add a pin using self as the object implementing the MKAnnotation protocol
                 self.mapCell.mapview.addAnnotation(self)
                 
@@ -336,9 +361,9 @@ class ISSViewAReminderViewController: UITableViewController {
                 cell?.selectionStyle = .none
             }
             
-            let arrivalTimeObject = (self.newReminder?.arrivalTimes[indexPath.item])!
+            let arrivalTimeObject = (self.newReminder?.arrivalTimes?[indexPath.item])!
             cell?.textLabel?.text = arrivalTimeObject.riseTime.humanReadableDate
-            cell?.detailTextLabel?.text = "Duration: \(arrivalTimeObject.duration) seconds"
+            cell?.detailTextLabel?.text = "Duration: \(arrivalTimeObject.duration!) seconds"
             
             return cell!
 
@@ -392,7 +417,7 @@ class ISSViewAReminderViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if(indexPath.section == 2 && self.tempPlacemark != nil)
+        if indexPath.section == 2 && (self.tempPlacemark != nil || self.newReminder?.arrivalTimes != nil)
         {
             return 240.0
         }
@@ -433,8 +458,10 @@ extension ISSViewAReminderViewController:UITextFieldDelegate
                 
                 if(success)
                 {
-                    self.tempPlacemark = aPlacemark
-                    
+                    DispatchQueue.main.async
+                        {
+                            self.tempPlacemark = aPlacemark
+                    }
                     // Is our data fresh? 
                     
                     if let arrivalTimes = self.newReminder?.arrivalTimes
@@ -528,6 +555,13 @@ extension ISSViewAReminderViewController:MKAnnotation
 {
     var coordinate: CLLocationCoordinate2D
     {
-            return (self.tempPlacemark?.location?.coordinate)!
+        if(self.tempPlacemark != nil)
+        {
+           return (self.tempPlacemark?.location?.coordinate)!
+        }
+        else{
+            return (self.newReminder?.location.coordinate)!
+        }
+        
     }
 }

@@ -22,7 +22,8 @@ class ISSRemindersViewController: BaseTableViewController, UISearchBarDelegate, 
         var wasActive = false
         var wasFirstResponder = false
     }
-
+    
+    var referenceContainerViewController:MainContainerViewController!
     
     
     var reminders:[ISSReminder]
@@ -94,6 +95,8 @@ class ISSRemindersViewController: BaseTableViewController, UISearchBarDelegate, 
                 restoredState.wasFirstResponder = false
             }
         }
+        
+        self.tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -217,7 +220,8 @@ class ISSRemindersViewController: BaseTableViewController, UISearchBarDelegate, 
         // Set up the detail view controller to show.
         let detailViewController = ISSViewAReminderViewController.detailViewControllerForReminder(selectedReminder)
         
-        navigationController?.pushViewController(detailViewController, animated: true)
+        referenceContainerViewController.navigationController?.pushViewController(detailViewController, animated: true)
+        
     }
     
     // MARK: - UIStateRestoration

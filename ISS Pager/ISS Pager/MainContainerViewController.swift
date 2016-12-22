@@ -18,6 +18,7 @@ class MainContainerViewController: UIViewController {
         
         // Instantiate View Controller
         var viewController = storyboard.instantiateViewController(withIdentifier: "ISSMapViewController") as! ISSMapViewController
+        viewController.referenceContainerViewController = self
         
         // Add View Controller as Child View Controller
         self.add(asChildViewController: viewController)
@@ -31,6 +32,8 @@ class MainContainerViewController: UIViewController {
         
         // Instantiate View Controller
         var viewController = storyboard.instantiateViewController(withIdentifier: "ISSRemindersViewController") as! ISSRemindersViewController
+        
+        viewController.referenceContainerViewController = self
         
         // Add View Controller as Child View Controller
         self.add(asChildViewController: viewController)
