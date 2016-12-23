@@ -31,11 +31,15 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate, CLLocationManag
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        
+        self.locationManager.requestAlwaysAuthorization()
+
         self.locationManager.requestWhenInUseAuthorization()
         
-
-        if CLLocationManager.locationServicesEnabled() {
+        if CLLocationManager.authorizationStatus() == .notDetermined {
+            
+            locationManager.requestWhenInUseAuthorization()
+        }
+        else if CLLocationManager.locationServicesEnabled() {
             locationManager.delegate = self
             locationManager.desiredAccuracy = kCLLocationAccuracyBest
             locationManager.startUpdatingLocation()

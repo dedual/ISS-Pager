@@ -464,6 +464,9 @@ extension ISSViewAReminderViewController:UITextFieldDelegate
                     }
                     // Is our data fresh?
                     
+                    self.newReminder?.latitude = aPlacemark?.location?.coordinate.latitude
+                    self.newReminder?.longitude = aPlacemark?.location?.coordinate.longitude
+                    
                     if let arrivalTimes = self.newReminder?.arrivalTimes
                     {
                         if(Date().minutes(from: arrivalTimes[0].riseTime) > 1)// if our data's older than a minute, it most likely won't be accurate
