@@ -7,16 +7,28 @@
 //
 
 import UIKit
-import CoreData
+import UserNotifications
+
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
 
+    var locationAndISSUpdateTimer:Timer!
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        application.setMinimumBackgroundFetchInterval(UIApplicationBackgroundFetchIntervalMinimum)
+
+        let pushNotificationSettings = UIUserNotificationSettings(types: [.alert, .badge, .sound], categories:nil)
+        application.registerUserNotificationSettings(pushNotificationSettings)
+        
+        LocalNotificationHelper.sharedInstance().registerUserNotification()
+
+        UIApplication.shared.cancelAllLocalNotifications()
+        
         return true
     }
 
@@ -43,5 +55,45 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Saves changes in the application's managed object context before the application terminates.
     }
 
+    
+    //Called when a notification is delivered to a foreground app.
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        
+        print("User Info = ",notification.request.content.userInfo)
+        
+        completionHandler([.alert, .badge, .sound])
+    }
+    
+    //Called to let your app know which action was selected by the user for a given notification.
+    @available(iOS 10.0, *)
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+       
+        completionHandler()
+    }
+    
+    //MARK: - Local notification support
+    
+    func application(_ application: UIApplication, didReceive notification: UILocalNotification)
+    {
+        
+        let message = notification.alertBody
+        if var userInfo = notification.userInfo
+        {
+            let type = Notification.Name.init(userInfo["key"] as! String)
+            
+            userInfo["message"] = message
+            
+            NotificationCenter.default.post(name: type, object: nil, userInfo: userInfo)
+            
+        }
+    }
+    
+    func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, for notification: UILocalNotification, withResponseInfo responseInfo: [AnyHashable : Any], completionHandler: @escaping () -> Void)
+    {
+        
+    }
+
+    
 }
 

@@ -22,6 +22,12 @@ extension String {
     }
 }
 
+extension Notification.Name // the different notifications we'll want to listen to
+{
+    static let onISSWithinUserRange = Notification.Name("onISSWithinUserRange")
+    static let onISSWithinReminderRange = Notification.Name("onISSWithinReminderRange")
+}
+
 extension Date
 {
     var humanReadableDate:String

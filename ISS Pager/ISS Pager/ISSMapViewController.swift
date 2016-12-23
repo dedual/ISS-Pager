@@ -10,11 +10,15 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class ISSMapViewController: UIViewController, MKMapViewDelegate
+class ISSMapViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDelegate
 {
+    let locationManager = CLLocationManager()
+    
     @IBOutlet var mapView:MKMapView!
     
     var currISSLocation:ISSLocation!
+    var myLocation:CLLocationCoordinate2D?
+
     
     var referenceContainerViewController:MainContainerViewController!
     
@@ -27,6 +31,15 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        
+        self.locationManager.requestWhenInUseAuthorization()
+        
+
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+            locationManager.startUpdatingLocation()
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -103,7 +116,13 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate
     {
         if annotation is MKUserLocation
         {
-            return nil
+            var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "User")
+
+            annotationView = AnnotationView(annotation: annotation, reuseIdentifier: "User")
+            annotationView?.canShowCallout = true
+            annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+            
+            return annotationView
         }
         
         if annotation is ISSReminderAnnotation
@@ -195,6 +214,36 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate
         circleRenderer.strokeColor = UIColor.blue
         circleRenderer.lineWidth = 1
         return circleRenderer
+    }
+    
+    //MARK: - Location Manager Delegates
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus)
+    {
+        if(status == .authorizedWhenInUse)
+        {
+            self.refreshMapAnnotations()
+            self.refreshISSLocation()
+        }
+        else
+        {
+            let alertController = UIAlertController(
+                title: "Background Location Access Disabled",
+                message: "In order to be notified of when the ISS is near you, please open this app's settings and set location access to 'When in Use'.",
+                preferredStyle: .alert)
+            
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alertController.addAction(cancelAction)
+            
+            let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
+                if let url = URL(string:UIApplicationOpenSettingsURLString) {
+                    UIApplication.shared.openURL(url)
+                }
+            }
+            alertController.addAction(openAction)
+            
+            self.present(alertController, animated: true, completion: nil)
+        }
     }
 
 }
