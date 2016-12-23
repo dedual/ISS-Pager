@@ -16,8 +16,8 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate, CLLocationManag
     
     @IBOutlet var mapView:MKMapView!
     
-    var currISSLocation:ISSLocation!
-    var myLocation:CLLocationCoordinate2D?
+    var currISSLocation:ISSLocation?
+    var myLocation:CLLocation?
 
     
     var referenceContainerViewController:MainContainerViewController!
@@ -31,9 +31,8 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate, CLLocationManag
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        self.locationManager.requestAlwaysAuthorization()
-
-        self.locationManager.requestWhenInUseAuthorization()
+        
+        self.mapView.showsUserLocation = true
         
         if CLLocationManager.authorizationStatus() == .notDetermined {
             
@@ -63,25 +62,43 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate, CLLocationManag
             {
                 self.currISSLocation = ISSLocation(json: jsonObject)
                 
-                for anAnnotation in self.mapView.annotations
+                if let currUserLocation = self.myLocation
                 {
-                    if anAnnotation is ISSLocationAnnotation
+                self.currISSLocation?.arrivalTimesFor(location: currUserLocation, completed: { (success, error) in
+                    if(success)
                     {
-                        self.mapView.removeAnnotation(anAnnotation)
-                    }
-                }
-                self.mapView.removeOverlays(self.mapView.overlays)
+                        for anAnnotation in self.mapView.annotations
+                        {
+                            if anAnnotation is ISSLocationAnnotation
+                            {
+                                self.mapView.removeAnnotation(anAnnotation)
+                            }
+                        }
+                        self.mapView.removeOverlays(self.mapView.overlays)
+                        
+                        let identifier = "ISSLocation"
+                        let annotation = ISSLocationAnnotation(coordinate: self.currISSLocation!.currLocation.coordinate, identifier: identifier, location: self.currISSLocation!)
+                        
+                        self.mapView.addAnnotation(annotation)
+                        
+                        let circle = MKCircle(center: annotation.coordinate, radius: 80000.0)
+                        
+                        self.mapView.add(circle)
+                        
+                        let dateText:String? = (self.currISSLocation?.arrivalTimes?[0].riseTime.humanReadableDate)
+                        
+                        if let date = dateText
+                        {
+                            let text = "Earliest ISS arrival: \(date)"
+                            
+                            self.mapView.userLocation.subtitle = text
 
-                let identifier = "ISSLocation"
-                let annotation = ISSLocationAnnotation(coordinate: self.currISSLocation.currLocation.coordinate, identifier: identifier, location: self.currISSLocation)
+                        }
+                        
+                    }
+                })
                 
-                self.mapView.addAnnotation(annotation)
-                
-                let circle = MKCircle(center: annotation.coordinate, radius: 80000.0)
-                
-                self.mapView.add(circle)
-                
-                
+                }
             }
         }, error: { response in
             
@@ -112,21 +129,35 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate, CLLocationManag
     
     //MARK: - MKMapViewDelegate function
     
-    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool)
+    {
         
+    }
+    
+    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {
+        
+        for view in views
+        {
+            if view.annotation is MKUserLocation
+            {
+                view.canShowCallout = true
+
+            }
+        }
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView?
     {
         if annotation is MKUserLocation
         {
-            var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: "User")
-
-            annotationView = AnnotationView(annotation: annotation, reuseIdentifier: "User")
-            annotationView?.canShowCallout = true
-            annotationView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+            mapView.userLocation.title = "My location!"
             
-            return annotationView
+            if let issLocation = currISSLocation, let arrivalTimes = issLocation.arrivalTimes
+            {
+                mapView.userLocation.subtitle = "Earliest arrival: \(arrivalTimes[0].riseTime.humanReadableDate)"
+            }
+            return nil
+
         }
         
         if annotation is ISSReminderAnnotation
@@ -222,9 +253,15 @@ class ISSMapViewController: UIViewController, MKMapViewDelegate, CLLocationManag
     
     //MARK: - Location Manager Delegates
     
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        
+        self.myLocation = locations.last
+        
+    }
+    
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus)
     {
-        if(status == .authorizedWhenInUse)
+        if(status == .authorizedWhenInUse || status == .authorizedAlways)
         {
             self.refreshMapAnnotations()
             self.refreshISSLocation()

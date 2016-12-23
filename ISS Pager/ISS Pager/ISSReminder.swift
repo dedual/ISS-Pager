@@ -19,9 +19,19 @@ class ISSReminderRiseAndDuration:NSObject, NSCoding
     
     init(rise:NSNumber, duration:NSNumber)
     {
+        super.init()
+
         self.riseTime = Date(timeIntervalSince1970: rise.doubleValue)
         self.duration = duration.doubleValue
     }
+    
+    init(json:[String:AnyObject])
+    {
+        super.init()
+        
+        self.prepareWithJSON(json: json)
+    }
+    
     required init?(coder decoder:NSCoder)
     {
         self.duration = decoder.decodeDouble(forKey: kISSRemindeDurationKey)
@@ -31,6 +41,14 @@ class ISSReminderRiseAndDuration:NSObject, NSCoding
     {
         coder.encode((self.duration as Double), forKey: kISSRemindeDurationKey) // Oh, the joys of typecasting in Swift
         coder.encode(self.riseTime, forKey: kISSReminderRiseTimeKey)
+    }
+    func prepareWithJSON(json:[String:AnyObject])
+    {
+        let riseTimeValue = json["risetime"] as! NSNumber
+        let durationValue = json["duration"] as! NSNumber
+        
+        self.riseTime = Date(timeIntervalSince1970: riseTimeValue.doubleValue)
+        self.duration = durationValue.doubleValue
     }
 }
 
