@@ -101,11 +101,24 @@ class ISSViewAReminderViewController: UITableViewController {
         {
             self.navigationItem.leftBarButtonItem = dismissButton
         }
+        
+        //Looks for single or multiple taps.
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(ISSViewAReminderViewController.dismissKeyboard))
+        
+        //Uncomment the line below if you want the tap not not interfere and cancel other interactions.
+        //tap.cancelsTouchesInView = false
+        
+        view.addGestureRecognizer(tap)
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func dismissKeyboard() {
+        //Causes the view (or one of its embedded text fields) to resign the first responder status.
+        view.endEditing(true)
     }
     
     @IBAction func close(_ sender:UIButton?)
@@ -340,6 +353,10 @@ class ISSViewAReminderViewController: UITableViewController {
                 let button = UIButton(frame: CGRect(x: 0, y: 0, width: self.view.frame.size.width, height:44))
                 
                 button.backgroundColor = UIColor.green
+                
+                button.setBackgroundImage(UIImage.fromColor(.green),for: .normal)
+                button.setBackgroundImage(UIImage.fromColor(UIColor.init(red: 0.0, green: 0.6, blue: 0.0, alpha: 1.0)), for: UIControlState.highlighted)
+                
                 button.setTitleColor(UIColor.white, for: .normal)
                 button.setTitle("SAVE CHANGES", for: .normal)
                 button.titleLabel?.textAlignment = .center
